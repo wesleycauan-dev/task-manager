@@ -1,0 +1,13 @@
+.home {
+  padding: var(--space-8) 0;
+}
+
+.home__title {
+  font-size: 2rem;
+  color: var(--color-primary);
+}
+
+.home__subtitle {
+  margin-top: var(--space-2);
+  color: var(--color-text-muted);
+}
