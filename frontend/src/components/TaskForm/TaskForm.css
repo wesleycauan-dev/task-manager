@@ -1,0 +1,88 @@
+/* Fundo escuro que cobre a tela inteira */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(17, 24, 39, 0.55);
+  padding: var(--space-4);
+}
+
+.task-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background-color: var(--color-surface);
+  border-radius: var(--radius);
+  padding: var(--space-6);
+}
+
+.task-form__title {
+  font-size: 1.3rem;
+}
+
+.task-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex: 1;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.task-form__field input,
+.task-form__field textarea,
+.task-form__field select {
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: var(--space-2) var(--space-3);
+  font-weight: 400;
+}
+
+.task-form__field textarea {
+  resize: vertical;
+}
+
+.task-form__field input:focus,
+.task-form__field textarea:focus,
+.task-form__field select:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 1px;
+}
+
+.task-form__row {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.task-form__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+.task-form__submit {
+  background-color: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: var(--space-2) var(--space-4);
+  font-weight: 600;
+}
+
+.task-form__submit:hover {
+  background-color: var(--color-primary-hover);
+}
+
+/* No celular, os campos lado a lado viram uma coluna */
+@media (max-width: 480px) {
+  .task-form__row {
+    flex-direction: column;
+  }
+}

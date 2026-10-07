@@ -1,0 +1,38 @@
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.dashboard__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  background-color: var(--color-surface);
+  border-radius: var(--radius);
+  border-left: 4px solid var(--color-primary);
+  box-shadow: var(--shadow);
+  padding: var(--space-4);
+}
+
+.dashboard__card--pending {
+  border-left-color: var(--color-warning);
+}
+
+.dashboard__card--progress {
+  border-left-color: #2563eb;
+}
+
+.dashboard__card--completed {
+  border-left-color: var(--color-success);
+}
+
+.dashboard__label {
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+.dashboard__value {
+  font-size: 1.8rem;
+}

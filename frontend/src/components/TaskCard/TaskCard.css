@@ -1,0 +1,124 @@
+.task-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  background-color: var(--color-surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: var(--space-4);
+}
+
+.task-card--completed .task-card__title,
+.task-card--completed .task-card__description {
+  text-decoration: line-through;
+  color: var(--color-text-muted);
+}
+
+.task-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.task-card__title {
+  font-size: 1.1rem;
+  word-break: break-word;
+}
+
+.task-card__description {
+  color: var(--color-text-muted);
+  font-size: 0.925rem;
+  word-break: break-word;
+}
+
+.task-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.task-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: auto;
+}
+
+/* Etiqueta de prioridade */
+.task-card__priority {
+  flex-shrink: 0;
+  border-radius: 999px;
+  padding: 2px var(--space-3);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.task-card__priority--high {
+  background-color: #fee2e2;
+  color: var(--color-danger);
+}
+
+.task-card__priority--medium {
+  background-color: #fef3c7;
+  color: var(--color-warning);
+}
+
+.task-card__priority--low {
+  background-color: #dcfce7;
+  color: var(--color-success);
+}
+
+/* Etiqueta de status */
+.task-card__status {
+  border-radius: 999px;
+  padding: 2px var(--space-2);
+  font-size: 0.75rem;
+  font-weight: 600;
+  background-color: var(--color-bg);
+}
+
+.task-card__status--in_progress {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+}
+
+.task-card__status--completed {
+  background-color: #dcfce7;
+  color: var(--color-success);
+}
+
+/* Botões pequenos reutilizáveis */
+.btn {
+  border-radius: 8px;
+  padding: var(--space-1) var(--space-3);
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+
+.btn--outline {
+  background: none;
+  border-color: var(--color-border);
+}
+
+.btn--outline:hover {
+  background-color: var(--color-bg);
+}
+
+.btn--success {
+  background-color: var(--color-success);
+  color: #fff;
+}
+
+.btn--danger {
+  background-color: var(--color-danger);
+  color: #fff;
+}
+
+.btn--danger:hover {
+  background-color: var(--color-danger-hover);
+}
