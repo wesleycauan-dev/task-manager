@@ -14,9 +14,15 @@ interface TaskFormProps {
   onCancel: () => void;
 }
 
-// Retorna a data de hoje no formato "AAAA-MM-DD".
+// Retorna a data de hoje, no horário LOCAL, no formato "AAAA-MM-DD".
 function today(): string {
-  return new Date().toISOString().split("T")[0];
+  const now = new Date();
+  const year = now.getFullYear();
+  // getMonth() começa em 0 (janeiro = 0), por isso somamos 1.
+  // padStart(2, '0') garante dois dígitos: "5" vira "05".
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
 
 function TaskForm({ task, onSubmit, onCancel }: TaskFormProps) {
