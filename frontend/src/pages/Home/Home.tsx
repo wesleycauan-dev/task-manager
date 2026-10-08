@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Header from "../../components/Header/Header";
 import Dashboard from "../../components/Dashboard/Dashboard";
-import Filters from "../../components/Filters/FIlters";
+import Filters from "../../components/Filters/FIlters.tsx";
 import TaskList from "../../components/TaskList/TaskList";
 import TaskForm from "../../components/TaskForm/TaskForm";
 import {
