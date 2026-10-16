@@ -5,7 +5,7 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: Postgres2026dev
+      POSTGRES_PASSWORD: Postgre2027dev
       POSTGRES_DB: task_manager
     ports:
       - "5432:5432"

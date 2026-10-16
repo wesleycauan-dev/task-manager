@@ -1,0 +1,51 @@
+// Gera o Prisma Client em JavaScript/TypeScript.
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Qual banco usar e onde encontrar a URL de conexão (no .env).
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Valores permitidos. O PostgreSQL também passa a recusar qualquer outro valor.
+enum TaskStatus {
+  pending
+  in_progress
+  completed
+
+  @@map("task_status")
+}
+
+enum TaskPriority {
+  low
+  medium
+  high
+
+  @@map("task_priority")
+}
+
+enum TaskCategory {
+  Estudos
+  Trabalho
+  Pessoal
+  Outros
+
+  @@map("task_category")
+}
+
+// Cada "model" vira uma tabela.
+model Task {
+  id          Int          @id @default(autoincrement())
+  title       String       @db.VarChar(100)
+  description String       @default("")
+  status      TaskStatus   @default(pending)
+  priority    TaskPriority @default(medium)
+  dueDate     DateTime     @map("due_date") @db.Date
+  category    TaskCategory
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+
+  @@map("tasks")
+}
