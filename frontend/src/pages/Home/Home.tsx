@@ -1,68 +1,37 @@
 import { useState } from "react";
 import Header from "../../components/Header/Header";
 import Dashboard from "../../components/Dashboard/Dashboard";
-import Filters from "../../components/Filters/FIlters.tsx";
+import Filters from "../../components/Filters/FIlters";
 import TaskList from "../../components/TaskList/TaskList";
 import TaskForm from "../../components/TaskForm/TaskForm";
+import { useTasks } from "../../hooks/useTasks";
+import { getErrorMessage } from "../../services/api";
 import {
   INITIAL_FILTERS,
   type Task,
   type TaskFilters,
   type TaskFormData,
-} from "../../types/task.ts";
+} from "../../types/task";
 import "./Home.css";
 
-// DADOS TEMPORÁRIOS: serão substituídos pela API
-const MOCK_TASKS: Task[] = [
-  {
-    id: 1,
-    title: "Estudar React",
-    description: "Estudar componentes, props e hooks.",
-    status: "pending",
-    priority: "high",
-    dueDate: "2026-10-10",
-    category: "Estudos",
-    createdAt: "2026-10-01T10:00:00.000Z",
-  },
-  {
-    id: 2,
-    title: "Finalizar relatório mensal",
-    description: "Enviar o relatório para o gerente até sexta.",
-    status: "in_progress",
-    priority: "medium",
-    dueDate: "2026-10-15",
-    category: "Trabalho",
-    createdAt: "2026-10-01T11:00:00.000Z",
-  },
-  {
-    id: 3,
-    title: "Marcar consulta no dentista",
-    description: "",
-    status: "pending",
-    priority: "low",
-    dueDate: "2026-10-20",
-    category: "Pessoal",
-    createdAt: "2026-10-02T09:00:00.000Z",
-  },
-  {
-    id: 4,
-    title: "Configurar o Git no computador novo",
-    description: "Instalar o Git e configurar nome e e-mail.",
-    status: "completed",
-    priority: "medium",
-    dueDate: "2026-10-05",
-    category: "Estudos",
-    createdAt: "2026-09-28T08:00:00.000Z",
-  },
-];
-
 function Home() {
-  const [tasks, setTasks] = useState<Task[]>(MOCK_TASKS);
+  // Os dados agora vêm do hook, que fala com a API.
+  const {
+    tasks,
+    stats,
+    loading,
+    loadError,
+    retry,
+    addTask,
+    editTask,
+    removeTask,
+  } = useTasks();
+
   const [filters, setFilters] = useState<TaskFilters>(INITIAL_FILTERS);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | undefined>(undefined);
 
-  //  Filtros (temporário: filtramos aqui no frontend)
+  // ---------- Filtros (ainda no frontend; a Etapa 11 move para a API) ----------
   const filteredTasks = tasks.filter((task) => {
     const matchesSearch = task.title
       .toLowerCase()
@@ -76,15 +45,7 @@ function Home() {
     return matchesSearch && matchesStatus && matchesPriority && matchesCategory;
   });
 
-  //  Números do dashboard
-  const total = tasks.length;
-  const pending = tasks.filter((task) => task.status === "pending").length;
-  const inProgress = tasks.filter(
-    (task) => task.status === "in_progress",
-  ).length;
-  const completed = tasks.filter((task) => task.status === "completed").length;
-
-  // Ações
+  // ---------- Abrir e fechar o formulário ----------
   function openCreateForm() {
     setEditingTask(undefined);
     setIsFormOpen(true);
@@ -100,38 +61,82 @@ function Home() {
     setEditingTask(undefined);
   }
 
-  function handleSubmit(data: TaskFormData) {
-    if (editingTask) {
-      // EDITAR: troca só a tarefa que tem o mesmo id
-      setTasks((previous) =>
-        previous.map((task) =>
-          task.id === editingTask.id ? { ...task, ...data } : task,
-        ),
+  // ⚠️ TEMPORÁRIO: alert() é feio, mas simples. Na Etapa 12 vira uma mensagem na tela.
+  function showError(message: string, error: unknown) {
+    window.alert(`❌ ${message}\n${getErrorMessage(error)}`);
+  }
+
+  // ---------- Ações: agora chamam a API de verdade ----------
+  async function handleSubmit(data: TaskFormData) {
+    try {
+      if (editingTask) {
+        await editTask(editingTask.id, data); // PATCH /tasks/:id
+      } else {
+        await addTask(data); // POST /tasks
+      }
+      closeForm(); // só fecha se deu certo: se falhar, o usuário não perde o que digitou
+    } catch (error) {
+      showError(
+        editingTask
+          ? "Não foi possível salvar a tarefa."
+          : "Não foi possível criar a tarefa.",
+        error,
       );
-    } else {
-      // CRIAR: monta uma tarefa nova (o id falso será gerado pelo banco depois)
-      const newTask: Task = {
-        ...data,
-        id: Date.now(),
-        createdAt: new Date().toISOString(),
-      };
-      setTasks((previous) => [newTask, ...previous]);
     }
-    closeForm();
   }
 
-  function handleComplete(id: number) {
-    setTasks((previous) =>
-      previous.map((task) =>
-        task.id === id ? { ...task, status: "completed" } : task,
-      ),
+  async function handleComplete(id: number) {
+    try {
+      await editTask(id, { status: "completed" }); // PATCH só com o campo que muda
+    } catch (error) {
+      showError("Não foi possível concluir a tarefa.", error);
+    }
+  }
+
+  async function handleDelete(id: number) {
+    if (!window.confirm("Tem certeza que deseja excluir esta tarefa?")) return;
+
+    try {
+      await removeTask(id); // DELETE /tasks/:id
+    } catch (error) {
+      showError("Não foi possível excluir a tarefa.", error);
+    }
+  }
+
+  // ---------- O que mostrar na tela ----------
+  function renderContent() {
+    if (loading) {
+      return <p className="home__message">⏳ Carregando tarefas...</p>;
+    }
+
+    if (loadError) {
+      return (
+        <div className="home__message home__message--error">
+          <p>❌ {loadError}</p>
+          <button className="btn btn--outline" onClick={retry}>
+            Tentar novamente
+          </button>
+        </div>
+      );
+    }
+
+    return (
+      <>
+        <Dashboard
+          total={stats.total}
+          pending={stats.pending}
+          inProgress={stats.inProgress}
+          completed={stats.completed}
+        />
+        <Filters filters={filters} onChange={setFilters} />
+        <TaskList
+          tasks={filteredTasks}
+          onEdit={openEditForm}
+          onComplete={handleComplete}
+          onDelete={handleDelete}
+        />
+      </>
     );
-  }
-
-  function handleDelete(id: number) {
-    if (window.confirm("Tem certeza que deseja excluir esta tarefa?")) {
-      setTasks((previous) => previous.filter((task) => task.id !== id));
-    }
   }
 
   return (
@@ -139,21 +144,7 @@ function Home() {
       <Header onNewTask={openCreateForm} />
 
       <main className="home">
-        <div className="container">
-          <Dashboard
-            total={total}
-            pending={pending}
-            inProgress={inProgress}
-            completed={completed}
-          />
-          <Filters filters={filters} onChange={setFilters} />
-          <TaskList
-            tasks={filteredTasks}
-            onEdit={openEditForm}
-            onComplete={handleComplete}
-            onDelete={handleDelete}
-          />
-        </div>
+        <div className="container">{renderContent()}</div>
       </main>
 
       {isFormOpen && (
