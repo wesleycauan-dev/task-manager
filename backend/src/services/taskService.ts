@@ -55,6 +55,10 @@ function isNotFoundError(error: unknown): boolean {
 // Os filtros se COMBINAM: cada um que existir entra no WHERE (como um AND).
 
 export async function listTasks(filters: TaskQueryFilters): Promise<Task[]> {
+  // simula uma resposta lenta quando o filtro é "pending"
+  await new Promise((resolve) =>
+    setTimeout(resolve, filters.status === "pending" ? 2000 : 0),
+  );
   // Prisma.TaskWhereInput é o tipo do "WHERE" do Prisma.
   const where: Prisma.TaskWhereInput = {};
 

@@ -19,3 +19,13 @@
   gap: var(--space-4);
   color: var(--color-danger);
 }
+
+/* Lista esmaecida enquanto uma nova busca está em andamento */
+.home__list {
+  transition: opacity 0.15s;
+}
+
+.home__list--refreshing {
+  opacity: 0.5;
+  pointer-events: none;
+}

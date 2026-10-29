@@ -15,35 +15,29 @@ import {
 import "./Home.css";
 
 function Home() {
-  // Os dados agora vêm do hook, que fala com a API.
+  // Os filtros precisam ser declarados ANTES do hook, pois o hook depende deles.
+  const [filters, setFilters] = useState<TaskFilters>(INITIAL_FILTERS);
   const {
     tasks,
     stats,
     loading,
+    refreshing,
     loadError,
     retry,
     addTask,
     editTask,
     removeTask,
-  } = useTasks();
+  } = useTasks(filters);
 
-  const [filters, setFilters] = useState<TaskFilters>(INITIAL_FILTERS);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | undefined>(undefined);
 
-  // ---------- Filtros (ainda no frontend; a Etapa 11 move para a API) ----------
-  const filteredTasks = tasks.filter((task) => {
-    const matchesSearch = task.title
-      .toLowerCase()
-      .includes(filters.search.toLowerCase());
-    const matchesStatus =
-      filters.status === "all" || task.status === filters.status;
-    const matchesPriority =
-      filters.priority === "all" || task.priority === filters.priority;
-    const matchesCategory =
-      filters.category === "all" || task.category === filters.category;
-    return matchesSearch && matchesStatus && matchesPriority && matchesCategory;
-  });
+  // ---------- Pesquisa (ainda no frontend; a Etapa 12 move para a API) ----------
+  // Status, prioridade e categoria já chegam filtrados pela API.
+  // Aqui sobrou só o título.
+  const visibleTasks = tasks.filter((task) =>
+    task.title.toLowerCase().includes(filters.search.toLowerCase()),
+  );
 
   // ---------- Abrir e fechar o formulário ----------
   function openCreateForm() {
@@ -66,15 +60,15 @@ function Home() {
     window.alert(`❌ ${message}\n${getErrorMessage(error)}`);
   }
 
-  // ---------- Ações: agora chamam a API de verdade ----------
+  // ---------- Ações ----------
   async function handleSubmit(data: TaskFormData) {
     try {
       if (editingTask) {
-        await editTask(editingTask.id, data); // PATCH /tasks/:id
+        await editTask(editingTask.id, data);
       } else {
-        await addTask(data); // POST /tasks
+        await addTask(data);
       }
-      closeForm(); // só fecha se deu certo: se falhar, o usuário não perde o que digitou
+      closeForm();
     } catch (error) {
       showError(
         editingTask
@@ -87,7 +81,7 @@ function Home() {
 
   async function handleComplete(id: number) {
     try {
-      await editTask(id, { status: "completed" }); // PATCH só com o campo que muda
+      await editTask(id, { status: "completed" });
     } catch (error) {
       showError("Não foi possível concluir a tarefa.", error);
     }
@@ -97,7 +91,7 @@ function Home() {
     if (!window.confirm("Tem certeza que deseja excluir esta tarefa?")) return;
 
     try {
-      await removeTask(id); // DELETE /tasks/:id
+      await removeTask(id);
     } catch (error) {
       showError("Não foi possível excluir a tarefa.", error);
     }
@@ -105,36 +99,47 @@ function Home() {
 
   // ---------- O que mostrar na tela ----------
   function renderContent() {
+    // Primeira carga: tela inteira de "Carregando".
     if (loading) {
       return <p className="home__message">⏳ Carregando tarefas...</p>;
     }
 
-    if (loadError) {
-      return (
-        <div className="home__message home__message--error">
-          <p>❌ {loadError}</p>
-          <button className="btn btn--outline" onClick={retry}>
-            Tentar novamente
-          </button>
-        </div>
-      );
-    }
-
     return (
       <>
-        <Dashboard
-          total={stats.total}
-          pending={stats.pending}
-          inProgress={stats.inProgress}
-          completed={stats.completed}
-        />
+        {/* Só mostra o dashboard se já temos números reais */}
+        {stats && (
+          <Dashboard
+            total={stats.total}
+            pending={stats.pending}
+            inProgress={stats.inProgress}
+            completed={stats.completed}
+          />
+        )}
+
+        {/* Os filtros ficam SEMPRE visíveis, mesmo se a busca falhar */}
         <Filters filters={filters} onChange={setFilters} />
-        <TaskList
-          tasks={filteredTasks}
-          onEdit={openEditForm}
-          onComplete={handleComplete}
-          onDelete={handleDelete}
-        />
+
+        {loadError ? (
+          <div className="home__message home__message--error">
+            <p>❌ {loadError}</p>
+            <button className="btn btn--outline" onClick={retry}>
+              Tentar novamente
+            </button>
+          </div>
+        ) : (
+          // Durante uma nova busca, a lista esmaece e não aceita cliques
+          // (evita clicar em um card que está prestes a ser substituído).
+          <div
+            className={`home__list ${refreshing ? "home__list--refreshing" : ""}`}
+          >
+            <TaskList
+              tasks={visibleTasks}
+              onEdit={openEditForm}
+              onComplete={handleComplete}
+              onDelete={handleDelete}
+            />
+          </div>
+        )}
       </>
     );
   }
