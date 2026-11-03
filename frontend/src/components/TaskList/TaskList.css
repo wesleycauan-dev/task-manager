@@ -5,6 +5,10 @@
 }
 
 .task-list__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
   background-color: var(--color-surface);
   border: 2px dashed var(--color-border);
   border-radius: var(--radius);
