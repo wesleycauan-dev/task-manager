@@ -32,7 +32,7 @@ function Home() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | undefined>(undefined);
 
-  // ---------- Pesquisa (ainda no frontend; a Etapa 12 move para a API) ----------
+  //  Pesquisa (ainda no frontend; a Etapa 12 move para a API)
   // Status, prioridade e categoria já chegam filtrados pela API.
   // Aqui sobrou só o título.
   const visibleTasks = tasks.filter((task) =>
@@ -55,12 +55,12 @@ function Home() {
     setEditingTask(undefined);
   }
 
-  // ⚠️ TEMPORÁRIO: alert() é feio, mas simples. Na Etapa 12 vira uma mensagem na tela.
+  //  TEMPORÁRIO: alert() é feio, mas simples. Na Etapa 12 vira uma mensagem na tela.
   function showError(message: string, error: unknown) {
     window.alert(`❌ ${message}\n${getErrorMessage(error)}`);
   }
 
-  // ---------- Ações ----------
+  // Ações 
   async function handleSubmit(data: TaskFormData) {
     try {
       if (editingTask) {
@@ -97,7 +97,7 @@ function Home() {
     }
   }
 
-  // ---------- O que mostrar na tela ----------
+  // O que mostrar na tela 
   function renderContent() {
     // Primeira carga: tela inteira de "Carregando".
     if (loading) {
