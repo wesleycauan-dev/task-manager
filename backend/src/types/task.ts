@@ -6,25 +6,23 @@ export type TaskStatus = (typeof STATUSES)[number];
 export type TaskPriority = (typeof PRIORITIES)[number];
 export type TaskCategory = (typeof CATEGORIES)[number];
 
-// Uma tarefa completa.
 export interface Task {
   id: number;
   title: string;
   description: string;
   status: TaskStatus;
   priority: TaskPriority;
-  dueDate: string; // "AAAA-MM-DD"
+  dueDate: string;
   category: TaskCategory;
-  createdAt: string; // ISO
+  createdAt: string;
 }
 
-// Dados para CRIAR: tudo, menos o que o servidor gera (id e createdAt).
-export type CreateTaskInput = Omit<Task, "id" | "createdAt">;
+export type CreateTaskInput = Omit<Task, "id" | "createdAt" | "description"> & {
+  description?: string;
+};
 
-// Dados para EDITAR: qualquer campo, todos opcionais.
 export type UpdateTaskInput = Partial<CreateTaskInput>;
 
-// Filtros que chegam pela URL
 export interface TaskQueryFilters {
   search?: string;
   status?: string;
@@ -32,7 +30,6 @@ export interface TaskQueryFilters {
   category?: string;
 }
 
-// Números do dashboard.
 export interface TaskStats {
   total: number;
   pending: number;

@@ -86,3 +86,23 @@
     flex-direction: column;
   }
 }
+
+/* Mensagem de erro embaixo do campo */
+.task-form__error {
+  color: var(--color-danger);
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+/* Campo com erro: borda vermelha (usa o atributo aria-invalid) */
+.task-form__field input[aria-invalid="true"],
+.task-form__field textarea[aria-invalid="true"],
+.task-form__field select[aria-invalid="true"] {
+  border-color: var(--color-danger);
+}
+
+/* Botão desabilitado enquanto salva */
+.task-form__submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

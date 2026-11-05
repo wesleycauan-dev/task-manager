@@ -28,9 +28,13 @@ export class ApiError extends Error {
 }
 
 // Devolve uma mensagem segura para mostrar ao usuário, seja qual for o erro.
-// "unknown" obriga a verificar o tipo antes de usar.
+// Se o backend mandou detalhes (400), eles vêm junto: "Dados inválidos: O título é obrigatório"
 export function getErrorMessage(error: unknown): string {
-  if (error instanceof ApiError) return error.message;
+  if (error instanceof ApiError) {
+    return error.details.length > 0
+      ? `${error.message}: ${error.details.join(". ")}`
+      : error.message;
+  }
   return "Ocorreu um erro inesperado.";
 }
 
