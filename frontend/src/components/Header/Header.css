@@ -8,6 +8,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--space-3);
   padding-top: var(--space-4);
   padding-bottom: var(--space-4);
 }
@@ -24,9 +25,22 @@
   border-radius: var(--radius);
   padding: var(--space-2) var(--space-4);
   font-weight: 600;
+  white-space: nowrap; /* o texto do botão nunca quebra em duas linhas */
+  flex-shrink: 0; /* e o botão nunca é espremido pelo título */
   transition: background-color 0.2s;
 }
 
 .header__button:hover {
   background-color: var(--color-primary-hover);
+}
+
+@media (max-width: 480px) {
+  .header__title {
+    font-size: 1.1rem;
+  }
+
+  .header__button {
+    padding: var(--space-2) var(--space-3);
+    font-size: 0.9rem;
+  }
 }

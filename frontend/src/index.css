@@ -64,3 +64,55 @@ button {
   margin: 0 auto;
   padding: 0 var(--space-4);
 }
+
+/* 
+   BOTÕES PEQUENOS REUTILIZÁVEIS
+   (movidos do TaskCard.css: são usados em vários componentes)
+   */
+.btn {
+  border-radius: 8px;
+  padding: var(--space-1) var(--space-3);
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+
+.btn--outline {
+  background: none;
+  border-color: var(--color-border);
+}
+
+.btn--outline:hover {
+  background-color: var(--color-bg);
+}
+
+.btn--success {
+  background-color: var(--color-success);
+  color: #fff;
+}
+
+.btn--danger {
+  background-color: var(--color-danger);
+  color: #fff;
+}
+
+.btn--danger:hover {
+  background-color: var(--color-danger-hover);
+}
+
+/* 
+   TELAS DE TOQUE (celular e tablet)
+   pointer: coarse = o "ponteiro" principal é um dedo.
+   44px é o tamanho mínimo recomendado para áreas clicáveis.
+  */
+@media (pointer: coarse) {
+  button,
+  select,
+  input:not([type="checkbox"]):not([type="radio"]) {
+    min-height: 44px;
+  }
+
+  button {
+    min-width: 44px;
+  }
+}

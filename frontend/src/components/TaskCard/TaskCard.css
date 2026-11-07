@@ -8,10 +8,15 @@
   padding: var(--space-4);
 }
 
-.task-card--completed .task-card__title,
-.task-card--completed .task-card__description {
-  text-decoration: line-through;
+.task-card__title {
+  font-size: 1.1rem;
+  overflow-wrap: anywhere;
+}
+
+.task-card__description {
   color: var(--color-text-muted);
+  font-size: 0.925rem;
+  overflow-wrap: anywhere;
 }
 
 .task-card__top {
@@ -91,34 +96,9 @@
   color: var(--color-success);
 }
 
-/* Botões pequenos reutilizáveis */
-.btn {
-  border-radius: 8px;
-  padding: var(--space-1) var(--space-3);
-  font-size: 0.85rem;
-  font-weight: 600;
-  border: 1px solid transparent;
-}
-
-.btn--outline {
-  background: none;
-  border-color: var(--color-border);
-}
-
-.btn--outline:hover {
-  background-color: var(--color-bg);
-}
-
-.btn--success {
-  background-color: var(--color-success);
-  color: #fff;
-}
-
-.btn--danger {
-  background-color: var(--color-danger);
-  color: #fff;
-}
-
-.btn--danger:hover {
-  background-color: var(--color-danger-hover);
+/* Celular: os 3 botões dividem a linha, em vez de ficarem com larguras diferentes */
+@media (max-width: 480px) {
+  .task-card__actions .btn {
+    flex: 1 1 auto;
+  }
 }

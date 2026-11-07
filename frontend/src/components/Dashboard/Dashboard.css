@@ -1,6 +1,6 @@
 .dashboard {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(4, 1fr); /* desktop: 4 cards em uma linha */
   gap: var(--space-4);
   margin-bottom: var(--space-6);
 }
@@ -35,4 +35,30 @@
 
 .dashboard__value {
   font-size: 1.8rem;
+}
+
+/* Tablet e celular: 2 colunas (2x2), sem card sozinho na última linha */
+@media (max-width: 768px) {
+  .dashboard {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Celular: cards mais compactos */
+@media (max-width: 480px) {
+  .dashboard {
+    gap: var(--space-3);
+  }
+
+  .dashboard__card {
+    padding: var(--space-3);
+  }
+
+  .dashboard__label {
+    font-size: 0.8rem;
+  }
+
+  .dashboard__value {
+    font-size: 1.5rem;
+  }
 }

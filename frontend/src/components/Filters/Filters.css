@@ -34,3 +34,15 @@
 .filters__clear:hover {
   background-color: var(--color-surface);
 }
+
+/* Celular: uma coluna, cada campo na largura toda */
+@media (max-width: 480px) {
+  .filters {
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .filters__search {
+    flex: 0 0 auto; /* anula o "flex: 1 1 240px", que numa coluna viraria ALTURA */
+  }
+}

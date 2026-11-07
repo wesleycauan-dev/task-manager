@@ -29,3 +29,13 @@
   opacity: 0.5;
   pointer-events: none;
 }
+
+@media (max-width: 480px) {
+  .home {
+    padding: var(--space-4) 0 var(--space-6);
+  }
+
+  .home__message {
+    padding: var(--space-6) var(--space-4);
+  }
+}

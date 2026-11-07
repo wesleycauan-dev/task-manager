@@ -56,11 +56,6 @@
   outline-offset: 1px;
 }
 
-.task-form__row {
-  display: flex;
-  gap: var(--space-4);
-}
-
 .task-form__actions {
   display: flex;
   justify-content: flex-end;
@@ -95,14 +90,47 @@
 }
 
 /* Campo com erro: borda vermelha (usa o atributo aria-invalid) */
-.task-form__field input[aria-invalid="true"],
-.task-form__field textarea[aria-invalid="true"],
-.task-form__field select[aria-invalid="true"] {
-  border-color: var(--color-danger);
+.task-form__field input,
+.task-form__field textarea,
+.task-form__field select {
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: var(--space-2) var(--space-3);
+  font-size: 1rem; /* 16px: evita o zoom automático do Safari no iPhone */
+  font-weight: 400;
 }
 
 /* Botão desabilitado enquanto salva */
 .task-form__submit:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+/* Celular: o modal vira uma "gaveta" colada no rodapé */
+@media (max-width: 480px) {
+  .modal {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .task-form {
+    max-width: none;
+    max-height: 92vh;
+    max-height: 92dvh; /* dvh = altura REAL visível (descontando a barra do navegador) */
+    border-radius: var(--radius) var(--radius) 0 0;
+    padding: var(--space-4);
+  }
+
+  .task-form__row {
+    flex-direction: column;
+  }
+
+  /* Botões empilhados na largura toda; column-reverse põe "Criar" em cima do "Cancelar" */
+  .task-form__actions {
+    flex-direction: column-reverse;
+  }
+
+  .task-form__actions button {
+    width: 100%;
+  }
 }
