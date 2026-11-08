@@ -31,9 +31,9 @@ Aplicação **Full Stack** de gerenciamento de tarefas, com CRUD completo, filtr
 
 ## 🖼️ Screenshots
 
-| Filtros e pesquisa           | Formulário com validação           | Mobile                     |
-| ---------------------------- | ---------------------------------- | -------------------------- |
-| ![Filtros](docs/filtros.png) | ![Formulário](docs/formulario.png) | ![Mobile](docs/mobile.png) |
+| Filtros e pesquisa           | Mobile                     |
+| ---------------------------- | -------------------------- |
+| ![Filtros](docs/filtros.png) | ![Mobile](docs/mobile.png) |
 
 ## 🏗️ Arquitetura
 
@@ -307,5 +307,5 @@ npm run lint        # em frontend/
 
 ## 👤 Autor
 
-**SEU NOME**
-[GitHub](https://github.com/SEU_USUARIO) · [LinkedIn](https://www.linkedin.com/in/SEU_PERFIL)
+**Wesley Cauan**
+[GitHub](https://github.com/wesleycauan-dev) · [LinkedIn](https://www.linkedin.com/in/wesleycauandev/)
