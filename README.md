@@ -2,7 +2,7 @@
 
 Aplicação **Full Stack** de gerenciamento de tarefas, com CRUD completo, filtros combinados, pesquisa e dashboard. Construída para praticar a integração entre **React, Node.js e PostgreSQL**.
 
-🔗 **Demo:** _em breve (link do deploy)_
+🔗 **Link do projeto:** https://task-manager-seven-blush-11.vercel.app/
 
 ![Tela principal](docs/home-desktop.png)
 
@@ -296,6 +296,24 @@ npm run lint        # em frontend/
 
 **Backend:** `dev`, `build`, `start`, `typecheck`, `test`, `prisma:migrate`, `prisma:studio`
 **Frontend:** `dev`, `build`, `preview`, `typecheck`, `lint`, `test`
+
+## ☁️ Deploy
+
+| Camada | Serviço | Configuração principal |
+|---|---|---|
+| Frontend | Vercel | Root `frontend`, variável `VITE_API_URL` |
+| API | Render | Root `backend`, build com `prisma migrate deploy`, variáveis `DATABASE_URL` e `FRONTEND_URL` |
+| Banco | Neon (PostgreSQL) | Conexão direta, com `sslmode=require` |
+
+**Ordem para publicar:** banco → API → frontend → ajustar `FRONTEND_URL` (CORS) na API.
+
+**Build Command da API:**
+
+```bash
+npm ci --include=dev && npx prisma generate && npm run build && npx prisma migrate deploy
+```
+
+**Start Command da API:** `npm start`
 
 ## 🗺️ Próximos passos
 
